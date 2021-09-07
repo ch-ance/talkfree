@@ -12,20 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Auth from "../../auth";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import state from "../../state";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -62,20 +49,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface LoginProps {
-  auth: Auth;
   setIsLoggedIn: (flag: boolean) => void;
 }
 
-const Login = ({ auth, setIsLoggedIn }: LoginProps) => {
+const Login = ({ setIsLoggedIn }: LoginProps) => {
   const [aliasText, setAliasText] = useState("");
   const [passwordText, setPasswordText] = useState("");
   const classes = useStyles();
 
+  const createNew = async (): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      state.local.user().create(aliasText, passwordText, (ack) => {
+        // @ts-ignore
+        if (ack.err) {
+          // @ts-ignore
+          alert(ack.err);
+          reject(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  };
+
   const signIn = async () => {
-    const newUserSuccess = await auth.createUser(aliasText, passwordText);
-    if (newUserSuccess) {
-      setIsLoggedIn(true);
-    }
+    state.local
+      .user()
+      .recall({ sessionStorage: true })
+      .auth(aliasText, passwordText, (ack) => {
+        console.log(ack);
+        // @ts-ignore
+        if (ack.err) {
+          // @ts-ignore
+          alert(ack.err);
+          return;
+        }
+        setIsLoggedIn(true);
+      });
   };
 
   return (
@@ -128,24 +138,23 @@ const Login = ({ auth, setIsLoggedIn }: LoginProps) => {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xl>
-              <Typography>
-                Don't have an account? Just enter your desired alias and
-                password and hit Sign In.
-              </Typography>
-            </Grid>
-            {/* <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid> */}
-            {/* <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid> */}
-          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={async (e) => {
+              e.preventDefault();
+              const newUser = await createNew();
+              if (newUser) {
+                signIn();
+              }
+            }}
+          >
+            Create New Account
+          </Button>
+          <Grid container></Grid>
         </form>
       </div>
     </Container>
