@@ -12,5 +12,5 @@ class State {
   }
 }
 
-const state = new State({ peers: ["http://localhost:8765/gun"] });
+const state = new State({ peers: [process.env.REACT_APP_GUN_PEER || ""] });
 export default state;
