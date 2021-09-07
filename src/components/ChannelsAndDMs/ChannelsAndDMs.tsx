@@ -13,11 +13,18 @@ import state from "../../state";
 import { IChannel } from "../../types";
 import JoinNewChannel from "./JoinNewChannel";
 
-const initialState = {
+interface InitialState {
+  channels: IChannel[];
+}
+
+const initialState: InitialState = {
   channels: [],
 };
 
-const reducer = (state: any, channel: IChannel) => {
+const reducer = (state: InitialState, channel: IChannel) => {
+  // check if the name already exists in state.
+  // not sure if the reducer is the right place to do this.
+  if (state.channels.map((c) => c.name).includes(channel.name)) return state;
   return {
     channels: [...state.channels, channel],
   };
@@ -27,7 +34,7 @@ const useStyles = makeStyles((theme) => {
   console.log("theme", theme);
   return {
     container: {
-      paddingTop: "60px",
+      paddingTop: "6rem",
       backgroundColor: theme.palette.primary.dark,
       width: "100%",
       marginLeft: 0,
@@ -55,9 +62,13 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const ChannelsAndDMs = () => {
-  const [channelState, dispatch] = useReducer(reducer, initialState);
+interface ChannelsAndDMsProps {
+  isLoggedIn: boolean;
+}
 
+const ChannelsAndDMs = ({ isLoggedIn }: ChannelsAndDMsProps) => {
+  const [channelState, dispatch] = useReducer(reducer, initialState);
+  const [isChannelSet, setIsChannelSet] = useState(false);
   const classes = useStyles();
 
   const ChannelItem = ({ name }: { name: string }) => {
@@ -80,16 +91,20 @@ const ChannelsAndDMs = () => {
     state.public
       .get("channels")
       .map()
-      .on((channel: any) => {
-        if (!channel.name) return;
+      .on((channel: IChannel) => {
+        if (!channel.name || !channel.id) return;
         console.log("channel added", channel);
-
+        if (!isChannelSet) {
+          // setIsChannelSet(true);
+          state.local.get("currentChannel").put(channel);
+        }
         dispatch(channel);
       });
 
     // cleanup
-    return state.public.get("channels").off();
-  }, []);
+    // return state.public.get("channels").off();
+  }, [isLoggedIn]);
+
   return (
     <Container className={classes.container}>
       <Typography>Channels</Typography>
@@ -100,9 +115,7 @@ const ChannelsAndDMs = () => {
               onClick={() => {
                 console.log(channel);
                 console.log("CLICKING");
-                state.local.get("currentChannel").put(channel, (ack) => {
-                  console.log("ack", ack);
-                });
+                state.local.get("currentChannel").put(channel);
                 console.log("should have gotten an ack...");
               }}
             >

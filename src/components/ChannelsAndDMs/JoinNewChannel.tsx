@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Typography,
   TextField,
@@ -6,7 +7,7 @@ import {
   Container,
   Button,
 } from "@material-ui/core";
-import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import state from "../../state";
 
 const useStyles = makeStyles((theme) => {
@@ -35,7 +36,7 @@ const JoinNewChannel = () => {
       alert("provide a name for your new room!");
       return;
     }
-    state.public.get("channels").set({ name: channelNameText });
+    state.public.get("channels").set({ name: channelNameText, id: uuidv4() });
   };
 
   return (
