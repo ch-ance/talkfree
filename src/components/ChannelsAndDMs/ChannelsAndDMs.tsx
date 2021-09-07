@@ -81,7 +81,7 @@ const ChannelsAndDMs = () => {
       .on((channel: any) => {
         if (!channel.name) return;
         console.log("channel added", channel);
-        state.local.get("currentChannel").put(channel);
+
         dispatch(channel);
       });
 
