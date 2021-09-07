@@ -46,12 +46,10 @@ const useStyles = makeStyles((theme) => {
       width: "100%",
     },
     hashtag: {
-      fontSize: "1.25rem",
       alignSelf: "flex-end",
     },
     channelName: {
       marginLeft: theme.spacing(1),
-      fontSize: "1.6rem",
       textTransform: "none",
     },
   };
@@ -67,8 +65,12 @@ const ChannelsAndDMs = () => {
     return (
       <ListItem className={classes.channelItem}>
         <Button className={classes.channelItemBtn}>
-          <Typography className={classes.hashtag}>#</Typography>
-          <Typography className={classes.channelName}>{name}</Typography>
+          <Typography className={classes.hashtag} variant="h6">
+            #
+          </Typography>
+          <Typography className={classes.channelName} variant="h6">
+            {name}
+          </Typography>
         </Button>
       </ListItem>
     );

@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react";
 import Auth from "./auth";
 import Login from "./components/Auth/Login";
 import state from "./state";
-import {
-  Container,
-  createTheme,
-  makeStyles,
-  ThemeProvider,
-} from "@material-ui/core";
+import { Container, createTheme, ThemeProvider } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import HomeScreen from "./HomeScreen";
 
 const auth = new Auth(state);
@@ -37,12 +33,14 @@ function App() {
   const classes = useStyles();
   useEffect(() => {}, []);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user"));
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    Boolean(localStorage.getItem("user"))
+  );
   return (
     <ThemeProvider theme={theme}>
       <Container className={classes.container}>
         {isLoggedIn ? (
-          <HomeScreen />
+          <HomeScreen auth={auth} />
         ) : (
           <Login auth={auth} setIsLoggedIn={setIsLoggedIn} />
         )}
