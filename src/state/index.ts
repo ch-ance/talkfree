@@ -16,5 +16,7 @@ const state = new State({
   peers: ["https://stark-badlands-20144.herokuapp.com/gun"],
 });
 // @ts-ignore
+// TODO
+// Is this safe to expose `state.local` to the window?
 window.gun = state;
 export default state;
