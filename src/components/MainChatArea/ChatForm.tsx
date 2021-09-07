@@ -37,6 +37,7 @@ const ChatForm = () => {
 
   useEffect(() => {
     state.local.get("currentChannel").on((channel) => {
+      if (!channel.name) return;
       setCurrentChannel(channel);
       console.log("channel line ~37", channel);
     });
