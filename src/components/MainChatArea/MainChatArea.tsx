@@ -1,4 +1,11 @@
-import { Container, List, ListItem, Typography } from "@material-ui/core";
+import {
+  Card,
+  Container,
+  Dialog,
+  List,
+  ListItem,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useEffect, useReducer, useState } from "react";
 import state from "../../state";
@@ -12,6 +19,7 @@ const useStyles = makeStyles((theme) => {
       height: "100%",
       maxWidth: "100vw",
       minHeight: "100vh",
+      paddingTop: "25px",
       paddingBottom: "25px",
       display: "flex",
       flexDirection: "column",
@@ -21,6 +29,15 @@ const useStyles = makeStyles((theme) => {
       paddingTop: "48px",
       overflow: "auto",
       height: "100%",
+    },
+    mine: {
+      justifyContent: "flex-end",
+    },
+    else: {},
+    messageCard: {
+      backgroundColor: theme.palette.secondary.main,
+      padding: "0.2rem",
+      marginLeft: "0.35rem",
     },
   };
 });
@@ -47,7 +64,11 @@ const reducer = (
   }
 };
 
-const MainChatArea = () => {
+interface MainChatAreaProps {
+  isLoggedIn: boolean;
+}
+
+const MainChatArea = ({ isLoggedIn }: MainChatAreaProps) => {
   const [messagesState, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -61,39 +82,47 @@ const MainChatArea = () => {
         .get(channel.name)
         .get("messages")
         .map()
-        .on((msg) => {
-          if (!msg.text) return;
+        .on((msg: IMessage) => {
+          if (!msg.id || !msg.from || !msg.text || !msg.timestamp || !msg.to)
+            return;
           console.log("incoming msg", msg);
           dispatch({ type: "add", payload: msg });
         }, true);
     });
-  }, []);
+    // TODO
+    // we listen to isLoggedIn because the first render doesn't call the event listeners for some reason
+    // so we need this for when the user first logs in.
+    // We should find a different method...
+  }, [isLoggedIn]);
 
   // cleanup
   // return state.public.get("channels").off();
   const classes = useStyles();
 
+  const Message = ({ id, from, text, timestamp, to }: IMessage) => {
+    const date = new Date(timestamp);
+    const mine = from === state.local.user().pair().pub;
+    return (
+      <ListItem className={mine ? classes.mine : classes.else}>
+        <Typography>
+          {date.getHours()}:{date.getMinutes()}:{date.getSeconds()}
+        </Typography>
+        <Card className={classes.messageCard}>
+          <Typography variant="body1">{text}</Typography>
+        </Card>
+      </ListItem>
+    );
+  };
+
   return (
     <Container className={classes.container}>
       <List className={classes.list}>
         {[...new Set(messagesState!.messages)].map((msg: IMessage) => {
-          return <Message text={msg.text} />;
+          return <Message {...msg} />;
         })}
       </List>
       <ChatForm />
     </Container>
-  );
-};
-
-interface MessageProps {
-  text: string;
-}
-
-const Message = ({ text }: MessageProps) => {
-  return (
-    <ListItem>
-      <Typography variant="body1">{text}</Typography>
-    </ListItem>
   );
 };
 

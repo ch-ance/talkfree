@@ -1,16 +1,13 @@
 import { Button, Input, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import state from "../../state";
-import { IChannel } from "../../types";
+import { IChannel, IMessage } from "../../types";
 
 const useStyles = makeStyles((theme) => {
   return {
-    form: {
-      // backgroundColor: theme.palette.getContrastText(
-      //   theme.palette.primary.main
-      // ),
-    },
+    form: {},
     textInput: {
       borderRadius: "15px",
     },
@@ -23,15 +20,22 @@ const ChatForm = () => {
   const classes = useStyles();
 
   const sendMessage = () => {
-    if (!currentChannel) {
+    if (!currentChannel || !currentChannel.id) {
       console.log("uh oh");
       return;
     }
+    const message: IMessage = {
+      id: uuidv4(),
+      from: state.local.user().pair().pub,
+      text: formText,
+      timestamp: Date.now(),
+      to: currentChannel.id,
+    };
     state.public
       .get("channels")
       .get(currentChannel.name)
       .get("messages")
-      .set({ text: formText });
+      .set(message);
     setFormText("");
   };
 
@@ -39,7 +43,7 @@ const ChatForm = () => {
     state.local.get("currentChannel").on((channel) => {
       if (!channel.name) return;
       setCurrentChannel(channel);
-      console.log("channel line ~37", channel);
+      console.log("channel", channel);
     });
   }, []);
 
@@ -59,7 +63,14 @@ const ChatForm = () => {
         value={formText}
         onChange={(e) => setFormText(e.target.value)}
       />
-      <Button>Send</Button>
+      <Button
+        onClick={(e) => {
+          e.preventDefault();
+          sendMessage();
+        }}
+      >
+        Send
+      </Button>
     </form>
   );
 };
