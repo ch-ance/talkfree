@@ -49,14 +49,13 @@ const reducer = (
       };
   }
 };
+
 const MainChatArea = () => {
   const [messagesState, dispatch] = useReducer(reducer, initialState);
+
   useEffect(() => {
-    console.log("SHOULD START LISTENING FOR CHANNEL CHANGES");
     state.local.get("currentChannel").on((channel) => {
-      if (!channel) return;
-      console.log("CHANNEL NAME", channel.name);
-      if (!channel.name) return;
+      if (!channel || !channel.name) return;
       dispatch({ type: ReducerTypes.reset });
 
       console.log("changed channel", channel);
@@ -66,6 +65,7 @@ const MainChatArea = () => {
         .get("messages")
         .map()
         .on((msg) => {
+          if (!msg.text) return;
           console.log("incoming msg", msg);
           dispatch({ type: ReducerTypes.add, payload: msg });
         }, true);
@@ -88,11 +88,11 @@ const MainChatArea = () => {
   );
 };
 
-interface IMessageProps {
+interface MessageProps {
   text: string;
 }
 
-const Message = ({ text }: IMessageProps) => {
+const Message = ({ text }: MessageProps) => {
   return (
     <ListItem>
       <Typography variant="body1">{text}</Typography>
