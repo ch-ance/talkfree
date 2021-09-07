@@ -52,13 +52,15 @@ const reducer = (
 const MainChatArea = () => {
   const [messagesState, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
+    console.log("SHOULD START LISTENING FOR CHANNEL CHANGES");
     state.local.get("currentChannel").on((channel) => {
+      if (!channel) return;
+      console.log("CHANNEL NAME", channel.name);
       if (!channel.name) return;
       dispatch({ type: ReducerTypes.reset });
 
       console.log("changed channel", channel);
       state.public
-        .get("chatty1")
         .get("channels")
         .get(channel.name)
         .get("messages")
@@ -67,11 +69,11 @@ const MainChatArea = () => {
           console.log("incoming msg", msg);
           dispatch({ type: ReducerTypes.add, payload: msg });
         }, true);
-    }, true);
+    });
   }, []);
 
   // cleanup
-  // return state.public.get("chatty1").get("channels").off();
+  // return state.public.get("channels").off();
   const classes = useStyles();
 
   return (

@@ -28,7 +28,6 @@ const ChatForm = () => {
       return;
     }
     state.public
-      .get("chatty1")
       .get("channels")
       .get(currentChannel.name)
       .get("messages")

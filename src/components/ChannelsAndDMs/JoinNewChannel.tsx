@@ -35,7 +35,7 @@ const JoinNewChannel = () => {
       alert("provide a name for your new room!");
       return;
     }
-    state.public.get("chatty1").get("channels").set({ name: channelNameText });
+    state.public.get("channels").set({ name: channelNameText });
   };
 
   return (
