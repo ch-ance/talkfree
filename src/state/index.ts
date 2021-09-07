@@ -12,7 +12,9 @@ class State {
   }
 }
 
-const state = new State({ peers: [process.env.REACT_APP_GUN_PEER || ""] });
+const state = new State({
+  peers: ["https://stark-badlands-20144.herokuapp.com/gun"],
+});
 // @ts-ignore
 window.gun = state;
 export default state;
