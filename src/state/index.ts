@@ -13,4 +13,6 @@ class State {
 }
 
 const state = new State({ peers: [process.env.REACT_APP_GUN_PEER || ""] });
+// @ts-ignore
+window.gun = state;
 export default state;
