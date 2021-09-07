@@ -29,14 +29,11 @@ const initialState = {
   messages: [],
 };
 
-enum ReducerTypes {
-  add = "add",
-  reset = "reset",
-}
+type ReducerType = "add" | "reset";
 
 const reducer = (
   state: any,
-  action: { type: ReducerTypes; payload?: IMessage }
+  action: { type: ReducerType; payload?: IMessage }
 ) => {
   switch (action.type) {
     case "add":
@@ -56,7 +53,7 @@ const MainChatArea = () => {
   useEffect(() => {
     state.local.get("currentChannel").on((channel) => {
       if (!channel || !channel.name) return;
-      dispatch({ type: ReducerTypes.reset });
+      dispatch({ type: "reset" });
 
       console.log("changed channel", channel);
       state.public
@@ -67,7 +64,7 @@ const MainChatArea = () => {
         .on((msg) => {
           if (!msg.text) return;
           console.log("incoming msg", msg);
-          dispatch({ type: ReducerTypes.add, payload: msg });
+          dispatch({ type: "add", payload: msg });
         }, true);
     });
   }, []);
