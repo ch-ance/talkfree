@@ -76,17 +76,17 @@ const ChannelsAndDMs = () => {
 
   useEffect(() => {
     state.public
-      .get("chatty1")
       .get("channels")
       .map()
       .on((channel: any) => {
+        if (!channel.name) return;
         console.log("channel added", channel);
         state.local.get("currentChannel").put(channel);
         dispatch(channel);
       });
 
     // cleanup
-    return state.public.get("chatty1").get("channels").off();
+    return state.public.get("channels").off();
   }, []);
   return (
     <Container className={classes.container}>
