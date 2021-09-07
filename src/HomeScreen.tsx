@@ -4,7 +4,6 @@ import ActivityFeed from "./components/ActivityFeed/ActivityFeed";
 import ChannelsAndDMs from "./components/ChannelsAndDMs/ChannelsAndDMs";
 import MainChatArea from "./components/MainChatArea/MainChatArea";
 import Header from "./components/Header/Header";
-import Auth from "./auth";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -28,20 +27,20 @@ const useStyles = makeStyles((theme) => {
 });
 
 interface HomeScreenProps {
-  auth: Auth;
+  isLoggedIn: boolean;
 }
 
-const HomeScreen = ({ auth }: HomeScreenProps) => {
+const HomeScreen = ({ isLoggedIn }: HomeScreenProps) => {
   const classes = useStyles();
 
   return (
     <Grid xl={12} container className={classes.container}>
-      <Header auth={auth} />
+      <Header isLoggedIn={isLoggedIn} />
       <Grid sm={2} lg={2} item>
-        <ChannelsAndDMs />
+        <ChannelsAndDMs isLoggedIn={isLoggedIn} />
       </Grid>
       <Grid sm={8} lg={8} item className={classes.centerContent}>
-        <MainChatArea />
+        <MainChatArea isLoggedIn={isLoggedIn} />
       </Grid>
       <Grid sm={2} lg={2} item>
         <ActivityFeed />

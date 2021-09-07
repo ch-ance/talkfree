@@ -1,7 +1,6 @@
 import { AppBar, Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
-import Auth from "../../auth";
 import state from "../../state";
 import { IChannel } from "../../types";
 
@@ -23,10 +22,10 @@ const useStyles = makeStyles((theme) => {
 });
 
 interface HeaderProps {
-  auth: Auth;
+  isLoggedIn: boolean;
 }
 
-const Header = ({ auth }: HeaderProps) => {
+const Header = ({ isLoggedIn }: HeaderProps) => {
   const [currentChannel, setCurrentChannel] = useState<IChannel>();
   const classes = useStyles();
 
@@ -38,7 +37,7 @@ const Header = ({ auth }: HeaderProps) => {
     });
 
     // return state.local.get("currentChannel").off();
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <AppBar className={classes.container}>
@@ -46,7 +45,7 @@ const Header = ({ auth }: HeaderProps) => {
       <Button
         className={classes.logoutBtn}
         onClick={() => {
-          auth.logout();
+          state.local.user().leave();
         }}
       >
         Log out
