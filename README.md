@@ -1,46 +1,61 @@
-# Getting Started with Create React App
+### Solving Infinite Scrolling problem
+Infinite scrolling sucks in the browser if you don't know the height of the items before you fetch them. It causes layout shifts.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is easy if every item is the same height, however in something like a messenging application, messages all vary in length so we don't know the height ahead of time. This is
 
-## Available Scripts
+To fix this, we can maintain a linked list or tree-like structure on each item that tells the approximate height of the next and previous items.
 
-In the project directory, you can run:
+For example, a message could look like this:
+```
+{
+    from: "Chance",
+    text: "Hello!",
+    prevMsgLength: 54,
+    nextMstLength: 22,
+}
+```
 
-### `yarn start`
+The browser should know the avg number of characters that fit on a line, as well as the height of a line on the DOM, and can predict the height of the next/previous message.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Now we can account for the current message + one additional message in the list. 
+To account for 1 + n messages in the list, just make a tree in the document.
+Modifying our previous example...
+```
+{
+    from: "Chance",
+    text: "Hello!",
+    prev: {
+        -1: { len: 54 },
+        ...
+    },
+    next: {
+        1: { len: 22 },
+        ...
+    }
+}
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+But why stop there? We can store the message text in the prev/next trees as well: 
+```
+...
+prev: { 
+    -1: { 
+        from: "Mark",
+        text: "Bloop blop bloopoo bleep"
+    },
+    -2: { 
+        from: "Dave",
+        text: "woopity wop wop wop!"
+    }
+},
+next: { 
+    1: { 
+        from: "Adam",
+        text: "real words real words"
+    }, 
+    2: {
+        from: "Chance",
+        text: "this is a messaage"
+    }
+}
+```

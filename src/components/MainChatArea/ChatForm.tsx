@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => {
 const ChatForm = () => {
   const [formText, setFormText] = useState("");
   const [currentChannel, setCurrentChannel] = useState<IChannel>();
+  const [currentMessageIndex, setCurrentMessageIndex] = useState();
   const classes = useStyles();
 
   const sendMessage = () => {
@@ -35,7 +36,19 @@ const ChatForm = () => {
       .get("channels")
       .get(currentChannel.name)
       .get("messages")
-      .set(message);
+      // .set(message)
+      .set(message, (ack) => {
+        console.log(ack)
+        // @ts-ignore
+        const graph=Object.keys(ack.$._.graph)
+        const key: string = graph[graph.length - 1]
+        state.public
+          .get("channels")
+          .get(currentChannel.name)
+          .get("lastMsgId")
+          // @ts-ignore
+          .put(key);
+      });
     setFormText("");
   };
 

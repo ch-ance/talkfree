@@ -7,13 +7,14 @@ class State {
   public: IGunChainReference;
   local: IGunChainReference;
   constructor(opts: IGunConstructorOptions) {
-    this.public = Gun(opts).get("xchattytester1");
+    this.public = Gun(opts).get("xchattytester100");
     this.local = Gun({ peers: [] }).get("state");
   }
 }
 
 const state = new State({
   peers: ["https://stark-badlands-20144.herokuapp.com/gun"],
+  localStorage: false
 });
 // @ts-ignore
 // TODO
