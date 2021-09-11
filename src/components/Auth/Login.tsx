@@ -61,6 +61,11 @@ const Login = ({ setIsLoggedIn }: LoginProps) => {
     return new Promise((resolve, reject) => {
       state.local.user().create(aliasText, passwordText, (ack) => {
         // @ts-ignore
+        // const pub = ack.pub;
+        // state.pub = pub;
+        // localStorage.setItem("talkfreePubKey", pub);
+        // setIsLoggedIn(true);
+        // @ts-ignore
         if (ack.err) {
           // @ts-ignore
           alert(ack.err);
@@ -77,13 +82,17 @@ const Login = ({ setIsLoggedIn }: LoginProps) => {
       .user()
       .recall({ sessionStorage: true })
       .auth(aliasText, passwordText, (ack) => {
-        console.log(ack);
+        console.log("ack", ack);
         // @ts-ignore
         if (ack.err) {
           // @ts-ignore
           alert(ack.err);
           return;
         }
+        // @ts-ignore
+        const pub = ack.sea.pub;
+        state.pub = pub;
+        localStorage.setItem("talkfreePubKey", pub);
         setIsLoggedIn(true);
       });
   };

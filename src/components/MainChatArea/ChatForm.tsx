@@ -2,6 +2,7 @@ import { Button, Input, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Messenger from "../../services/Messenger";
 import state from "../../state";
 import { IChannel, IMessage } from "../../types";
 
@@ -16,30 +17,20 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const ChatForm = () => {
+interface ChatFormProps {
+  disabled: boolean;
+}
+
+const ChatForm = (props: ChatFormProps) => {
   const [formText, setFormText] = useState("");
   const [currentChannel, setCurrentChannel] = useState<IChannel>();
-  const [currentMessageIndex, setCurrentMessageIndex] = useState();
+  const isChatDisabled = !currentChannel || !currentChannel.name;
   const classes = useStyles();
 
-  const sendMessage = () => {
-    if (!currentChannel || !currentChannel.id) {
-      console.log("uh oh");
-      return;
-    }
-    const message: IMessage = {
-      id: uuidv4(),
-      from: state.local.user().pair().pub,
-      text: formText,
-      timestamp: Date.now(),
-      to: currentChannel.id,
-    };
-    state.public
-      .get("channels")
-      .get(currentChannel.name)
-      .get("messages")
-      // .set(message)
-      .set(message);
+  const sendMessage = async () => {
+    if (!currentChannel || !currentChannel.name) return;
+    console.log("sending message. current channel", currentChannel);
+    await Messenger.send(formText, currentChannel);
     setFormText("");
   };
 
@@ -66,12 +57,14 @@ const ChatForm = () => {
         autoFocus
         value={formText}
         onChange={(e) => setFormText(e.target.value)}
+        disabled={isChatDisabled || props.disabled}
       />
       <Button
         onClick={(e) => {
           e.preventDefault();
           sendMessage();
         }}
+        disabled={isChatDisabled || props.disabled}
       >
         Send
       </Button>
