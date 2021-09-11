@@ -91,15 +91,15 @@ const MainChatArea = ({ isLoggedIn }: MainChatAreaProps) => {
         .get(channel.name)
         .get("lastMsgId")
         .on((lastMsgId) => {
-          console.log('lastMsgId', lastMsgId)
+          console.log("lastMsgId", lastMsgId);
           state.public
             .get("channels")
             .get(channel.name)
-            .get('ktdupu4etlih8FafF2Cr')
+            .get("ktdupu4etlih8FafF2Cr")
             // @ts-ignore
             .once((msg: IMessage, key) => {
-              console.log('KEYYY', key)
-              console.log('msg', msg)
+              console.log("KEYYY", key);
+              console.log("msg", msg);
               if (
                 !msg ||
                 !msg.id ||
@@ -107,7 +107,7 @@ const MainChatArea = ({ isLoggedIn }: MainChatAreaProps) => {
                 !msg.text ||
                 !msg.timestamp ||
                 !msg.to
-              ) 
+              )
                 return;
               dispatch({ type: "add", payload: msg });
             });

@@ -54,15 +54,13 @@ function App() {
             <Route path="/blog">
               <Blog />
             </Route>
-            {isLoggedIn ? (
-              <Route path="/app">
+            <Route path="/app">
+              {isLoggedIn ? (
                 <HomeScreen isLoggedIn={isLoggedIn} />
-              </Route>
-            ) : (
-              <Route path="/auth">
+              ) : (
                 <Login setIsLoggedIn={setIsLoggedIn} />
-              </Route>
-            )}
+              )}
+            </Route>
           </Container>
         </ThemeProvider>
       </Switch>

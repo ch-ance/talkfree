@@ -38,10 +38,10 @@ const ChatForm = () => {
       .get("messages")
       // .set(message)
       .set(message, (ack) => {
-        console.log(ack)
+        console.log(ack);
         // @ts-ignore
-        const graph=Object.keys(ack.$._.graph)
-        const key: string = graph[graph.length - 1]
+        const graph = Object.keys(ack.$._.graph);
+        const key: string = graph[graph.length - 1];
         state.public
           .get("channels")
           .get(currentChannel.name)
