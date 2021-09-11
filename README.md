@@ -1,3 +1,9 @@
+# TODOS
+- messages shouldn't send when there is no channel. I thought I fixed this? 
+  - SOLUTION: Disable the send button when there is no active channel!
+  - OTHER POSSIBLE SOLUTION: auto-join every user to a "hello-world" channel.
+    - maybe only allow emojis or censor profanity somehow
+- FIX THE LOGIN UI. I click "sign in" every single time instead of create user
 ### Solving Infinite Scrolling problem
 Infinite scrolling sucks in the browser if you don't know the height of the items before you fetch them. It causes layout shifts.
 
