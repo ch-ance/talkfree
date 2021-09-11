@@ -165,7 +165,7 @@ const Blog = () => {
           messages in a channel.
           <br />
           <br />
-          Luckily, someone in the Gun community discord helped me find a
+          Luckily, Carlos Vega from the Gun community discord helped me find a
           solution. All we need to do is build an index table on the user's
           device, and store the timestamp of the message as well as the key to
           find it in Gun.
