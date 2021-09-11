@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: "3px",
     fontSize: "1.4rem",
   },
+  code: {
+    backgroundColor: "#353535",
+    padding: "10px",
+  },
 }));
 
 const Blog = () => {
@@ -179,11 +183,49 @@ const Blog = () => {
     );
   };
 
+  const LoadingMessagesPost = () => {
+    return (
+      <Container className={classes.postContainer}>
+        <div className={classes.postHeader}>
+          <Typography className={classes.title} variant="h2">
+            Fetching Messages and Loading States
+          </Typography>
+          <Typography className={classes.date}>Sep 11, 2021</Typography>
+        </div>
+        <Typography className={classes.bodyText} variant="body1">
+          Okay, I tried to implement a way to fetch messages that makes sense
+          for a, well, messaging app.
+          <br />
+          <br />
+          This was actually difficult, and I have no idea if what I'm doing is
+          right.
+          <br />
+          <br />
+          It seems to work okay. I tested it using Google Chrome's
+          "Low-end-mobile" data throttling emulator, and the loading screen
+          appeared until the most recent messages were there, so I'll assume
+          it's okay for now.
+          <br />
+          <br />
+          How do I explain this.... I'll try to just explain the code.
+          <br />
+          <br />
+        </Typography>
+      </Container>
+    );
+  };
+
+  const posts = [
+    <LoadingMessagesPost />,
+    <div style={{ marginTop: "25px", marginBottom: "25px" }} />,
+    <WhereWereAtPost />,
+    <div style={{ marginTop: "25px", marginBottom: "25px" }} />,
+    <IntroductionPost />,
+  ];
+
   return (
     <Container className={classes.container}>
-      <IntroductionPost />
-      <div style={{ marginTop: "25px", marginBottom: "25px" }} />
-      <WhereWereAtPost />
+      {posts.map((p) => p)}
       <div style={{ paddingBottom: "100px" }} />
     </Container>
   );
