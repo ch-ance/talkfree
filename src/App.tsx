@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import Login from "./components/Auth/Login";
 import { Container, createTheme, ThemeProvider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import HomeScreen from "./HomeScreen";
 import state from "./state";
+import LandingPage from "./components/LandingPage/LandingPage";
+import Blog from "./components/Blog/Blog";
 
 const theme = createTheme({
   palette: {
@@ -41,15 +44,29 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container className={classes.container}>
-        {isLoggedIn ? (
-          <HomeScreen isLoggedIn={isLoggedIn} />
-        ) : (
-          <Login setIsLoggedIn={setIsLoggedIn} />
-        )}
-      </Container>
-    </ThemeProvider>
+    <Router>
+      <Switch>
+        <ThemeProvider theme={theme}>
+          <Container className={classes.container}>
+            <Route exact path="/">
+              <LandingPage />
+            </Route>
+            <Route path="/blog">
+              <Blog />
+            </Route>
+            {isLoggedIn ? (
+              <Route path="/app">
+                <HomeScreen isLoggedIn={isLoggedIn} />
+              </Route>
+            ) : (
+              <Route path="/auth">
+                <Login setIsLoggedIn={setIsLoggedIn} />
+              </Route>
+            )}
+          </Container>
+        </ThemeProvider>
+      </Switch>
+    </Router>
   );
 }
 
