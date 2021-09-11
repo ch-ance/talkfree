@@ -10,8 +10,7 @@ const useStyles = makeStyles((theme) => {
     container: {
       display: "flex",
       maxWidth: "100vw",
-      minHeight: "100vh",
-
+      minHeight: "100%",
       paddingLeft: 0,
       color: theme.palette.text.primary,
     },
