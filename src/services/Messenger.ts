@@ -8,6 +8,10 @@ interface IDexie extends Dexie {
   indexes?: Dexie.Table;
 }
 
+export type GetAllMessagesOpts = {
+  initialMsgCount?: number;
+};
+
 class Messenger {
   db: IDexie;
   msgKeys: string[];
@@ -55,17 +59,24 @@ class Messenger {
     });
   }
 
-  /**
+  /** Get all messages in a channel, performing a callback on each message.
    *
-   * @param channel the channel to get the messages from.
+   * @param channel the channel to get the messages from
+   * @param initialMsgCount number of messages to fetch before resolving
    * @param cb the callback to invoke on each message
+   *
+   * @returns an array containing the first `initialMsgCount` messages, and a promise to fetch the remaining messages from the given channel
    */
-  async getAllMessages(channel: IChannel, cb: (msg: IMessage) => void) {
+  async onEveryMessage(
+    channel: IChannel,
+    cb: (msg: IMessage) => void,
+    { initialMsgCount }: GetAllMessagesOpts
+  ): Promise<any> {
     let all = await this.db.indexes?.toCollection().toArray();
     console.log("all", all);
     console.log("all!.length", all!.length);
     all = all?.reverse();
-    const receivedMessages: Promise<IMessage>[] = all!.map(
+    const receivedMsgPromises: Promise<any>[] = all!.map(
       async ({ user, key }, index) => {
         return new Promise((resolve, reject) => {
           state.public
@@ -74,22 +85,26 @@ class Messenger {
             .get(channel.id)
             .get(key)
             // @ts-ignore
-            .once((msg: IMessage) => {
+            .on((msg: IMessage) => {
               if (!msg) reject("undefined message");
               if (this.msgKeys.includes(key)) {
                 reject("key already included: " + key);
               }
-              if (msg) {
-                cb(msg);
-                this.msgKeys.push(key);
-                resolve(msg);
-              }
+              if (msg) console.log("msg received");
+              cb(msg);
+              this.msgKeys.push(key);
+              resolve(true);
             });
         });
       }
     );
-    let promiseArray = receivedMessages;
-    return Promise.all(promiseArray);
+    initialMsgCount = initialMsgCount || receivedMsgPromises.length;
+    // let initialMsgPromiseArr = receivedMsgPromises.slice(
+    // 0,
+    // initialMsgCount - 1
+    // );
+    // return Promise.all(initialMsgPromiseArr);
+    return Promise.all([]);
   }
 
   /**

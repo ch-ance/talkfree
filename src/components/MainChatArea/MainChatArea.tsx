@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { ReducerState, useEffect, useMemo, useReducer, useState } from "react";
-import Messenger from "../../services/Messenger";
+import Messenger, { GetAllMessagesOpts } from "../../services/Messenger";
 import state from "../../state";
 import { IChannel, IMessage } from "../../types";
 import ChatForm from "./ChatForm";
@@ -95,20 +95,20 @@ const MainChatArea = ({ isLoggedIn }: MainChatAreaProps) => {
 
     if (!channel || !channel.name) return;
     try {
-      const res = await Messenger.getAllMessages(channel, (msg) => {
-        // console.log("msg from callback", msg);
-
-        dispatch({ type: "add", payload: msg });
-      });
-      console.log("Messenger.getAllMessages response", res);
+      const res = await Messenger.onEveryMessage(
+        channel,
+        (msg) => {
+          dispatch({ type: "add", payload: msg });
+        },
+        {
+          initialMsgCount: 5,
+        }
+      );
+      console.log("Messenger.onEveryMessage response", res);
       setShouldDisplayLoading(false);
     } catch (err) {
       console.error(err);
-    } finally {
-      console.log("done loading for real");
     }
-
-    console.log("at least we got here?");
 
     // Messenger.subscribeToEachParticipant(channel, (msg) => {
     // dispatch({ type: "add", payload: msg });
@@ -129,6 +129,7 @@ const MainChatArea = ({ isLoggedIn }: MainChatAreaProps) => {
   const Message = ({ id, from, text, timestamp, to }: IMessage) => {
     const date = new Date(timestamp);
     const mine = from === state.local.user().pair().pub;
+
     return (
       <ListItem className={mine ? classes.mine : classes.else}>
         <Typography>
