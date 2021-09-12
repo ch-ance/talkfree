@@ -89,19 +89,7 @@ class Messenger {
       }
     );
     let promiseArray = receivedMessages;
-    // why is there not a `Promise.some()` function in Javascript? Guess I'll implement my own...
-    const someFinished = async (arr: Promise<any>[], count: number) => {
-      let index = 0;
-      return new Promise((resolve, reject) => {
-        arr[index].then(() => {
-          index++;
-        });
-        if (index === count - 1) {
-          resolve(true);
-        }
-      });
-    };
-    return someFinished(promiseArray, 10);
+    return Promise.all(promiseArray);
   }
 
   /**
