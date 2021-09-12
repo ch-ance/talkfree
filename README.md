@@ -1,6 +1,6 @@
 # TODOS
-- messages shouldn't send when there is no channel. I thought I fixed this? 
-  - SOLUTION: Disable the send button when there is no active channel!
+- messages shouldn't send when there is no channel.
+  - SOLUTION: Disable the send button when there is no active channel! <-- this is the current solution. `Send` UI is disabled during loading.
   - OTHER POSSIBLE SOLUTION: auto-join every user to a "hello-world" channel.
     - maybe only allow emojis or censor profanity somehow
 - FIX THE LOGIN UI. I click "sign in" every single time instead of create user
