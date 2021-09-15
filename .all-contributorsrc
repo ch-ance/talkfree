@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "modderme123",
+      "name": "Modder Me",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14153763?v=4",
+      "profile": "https://moddermeht.ml",
+      "contributions": [
+        "infra"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "talkfree",
+  "projectOwner": "ch-ance",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
