@@ -1,3 +1,6 @@
+#talkfree
+talkfree is a decentralized p2p messaging app that hopes to provide a more secure, censorship-resistant alternative to messaging platforms like Discord.
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
