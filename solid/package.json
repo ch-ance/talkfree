@@ -1,0 +1,26 @@
+{
+  "name": "talkfree",
+  "version": "0.0.1",
+  "description": "open source p2p discord killer",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite --port 8080",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@originjs/vite-plugin-commonjs": "^1.0.0",
+    "autoprefixer": "^10.3.4",
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.15",
+    "vite": "^2.5.1",
+    "vite-plugin-solid": "^2.0.3"
+  },
+  "dependencies": {
+    "dexie": "^3.0.3",
+    "ipfs-core": "^0.10.6",
+    "solid-js": "^1.1.1",
+    "vite-plugin-ejs": "^1.4.1"
+  }
+}
