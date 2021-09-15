@@ -1,9 +1,9 @@
 import auth, { Identity } from "./auth";
-import IPFS from "ipfs-core";
+import { create, IPFS } from "ipfs";
 class Vurt {
-  ipfs: IPFS.IPFS;
+  ipfs: IPFS;
   constructor() {
-    ipfs: IPFS.create();
+    ipfs: create();
   }
 
   async createIdentity(alias: string): Promise<Identity> {
