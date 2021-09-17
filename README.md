@@ -55,13 +55,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-      <tr>
-    <td align="center"><a href="https://github.com/ch-ance"><img src="https://avatars.githubusercontent.com/u/33612720?v=4" width="100px;" alt=""/><br /><sub><b>Chance Embrey-Farquhar</b></sub></a><br /><a href="#code-ch-ance" title="Code ">💻</a></td>
+<tr>
+    <td align="left"><a href="https://github.com/ch-ance"><img src="https://avatars.githubusercontent.com/u/33612720?v=4" width="100px;" alt=""/><br /><sub><b>Chance Embrey-Farquhar</b></sub></a><br /><a href="#code-ch-ance" title="Code ">💻</a></td>
           
     <td align="center"><a href="https://moddermeht.ml"><img src="https://avatars.githubusercontent.com/u/14153763?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Modder Me</b></sub></a><br /><a href="#infra-modderme123" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
           
-    <td align="center"><a href="https://github.com/kembreyfarquhar"><img src="https://avatars.githubusercontent.com/u/47987809?v=4" width="100px;" alt=""/><br /><sub><b>Katie Embrey-Farquhar</b></sub></a><br /><a href="#code-kembreyfarquhar" title="Code">🚇</a></td>     
-  </tr>
+    <td align="right"><a href="https://github.com/kembreyfarquhar"><img src="https://avatars.githubusercontent.com/u/47987809?v=4" width="100px;" alt=""/><br /><sub><b>Katie Embrey-Farquhar</b></sub></a><br /><a href="#code-kembreyfarquhar" title="Code">🚇</a></td>     
+</tr>
 </table>
 
 <!-- markdownlint-restore -->
