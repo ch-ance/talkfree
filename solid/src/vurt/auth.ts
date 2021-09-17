@@ -2,43 +2,39 @@ import * as nacl from "tweetnacl";
 import * as util from "tweetnacl-util";
 
 export interface Identity {
-  publicKey: string;
+  persona: {
+    alias: string;
+    publicKey: string;
+  };
   secretKey: string;
-  cid: string;
 }
 
+type ChangeFields<T, R> = Omit<T, keyof R> & R;
+
+export type IdentityWithoutAlias = ChangeFields<
+  Identity,
+  {
+    persona: Omit<Identity["persona"], "alias">;
+  }
+>;
+
 const auth = {
-  /**
-   * @param alias a string to be stored next to the user's public key so other's can more easily identify them once they are connected. Aliases do not have to be unique because they are simply used as a display name.
-   */
-  createIdentity: async (alias: string): Promise<Identity> => {
+  createIdentity: () => {
     // create a keypair
     const keypair = nacl.box.keyPair();
     const publicKey = util.encodeBase64(keypair.publicKey);
     const secretKey = util.encodeBase64(keypair.secretKey);
 
-    return new Promise(async (resolve, reject) => {
-      try {
-        // publish our public key and alias to IPFS
-        const cid = await sendToIpfs({ alias, publicKey });
-        const identity: Identity = {
-          publicKey,
-          secretKey,
-          cid: "string",
-        };
-        resolve(identity);
-      } catch (err) {
-        reject(err);
-      }
-    });
+    // publish our public key and alias to IPFS
+    const identity: IdentityWithoutAlias = {
+      persona: {
+        publicKey,
+      },
+      secretKey,
+    };
+    return identity;
   },
 };
-
-async function sendToIpfs(data: any) {
-  return new Promise(async (resolve, reject) => {
-    resolve("asdr");
-  });
-}
 
 export default auth;
 
