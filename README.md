@@ -43,7 +43,7 @@ to join a channel:
 ## resources 
 http://colormind.io/ - generate color palettes
 https://www.tailwindshades.com/ - generate tailwindcss shades from a given color
-
+https://daisyui.com/docs/ - library of tailwind classes
 
 
 
