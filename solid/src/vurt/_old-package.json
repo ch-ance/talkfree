@@ -1,0 +1,10 @@
+{
+  "name": "vurt",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1"
+  }
+}

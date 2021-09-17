@@ -23,7 +23,7 @@ handles thousands of participants in a single channel
 
 
 ## techstack
-- SolidJS - it renders very quickly and it seems to encourage good code practices. Basically, it's kind of easy to screw up a React app.
+- SolidJS - it renders very quickly and it seems to encourage good code practices. Basically, it's kind of easy to screw up a React app. 
 
 - Dexie - helpful indexedDB wrapper. We want to store data in the browser so that we can quickly fetch it and render it, while we wait for peer responses and eventual consistency and all that. Dexie doesn't handle any of this extra stuff for us, so the rest of the tech stack will.
 > NOTE: I'm not sure if we need Dexie. OrbitDB saves data "on disk". not sure where that is exactly, so we'll see.
@@ -40,10 +40,10 @@ to join a channel:
 - someone needs to add the identity to have write access
 
 
-## resources
+## resources 
 http://colormind.io/ - generate color palettes
 https://www.tailwindshades.com/ - generate tailwindcss shades from a given color
-
+https://daisyui.com/docs/ - library of tailwind classes
 
 
 
@@ -55,7 +55,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table><tr><td align="center"><a href="https://github.com/ch-ance"><img src="https://avatars.githubusercontent.com/u/33612720?v=4" width="100px;" alt=""/><br /><sub><b>Chance Embrey-Farquhar</b></sub></a><br /><a href="#code-ch-ance" title="Code">💻</a></td><td align="center"><a href="https://moddermeht.ml"><img src="https://avatars.githubusercontent.com/u/14153763?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Modder Me</b></sub></a><br /><a href="#infra-modderme123" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td><td align="center"><a href="https://github.com/kembreyfarquhar"><img src="https://avatars.githubusercontent.com/u/47987809?v=4" width="100px;" alt=""/><br /><sub><b>Katie Embrey-Farquhar</b></sub></a><br /><a href="#code-kembreyfarquhar" title="Code">💻</a></td></tr></table>
-
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
