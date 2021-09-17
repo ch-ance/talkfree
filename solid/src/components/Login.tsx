@@ -1,29 +1,32 @@
-import { createMemo, createSignal } from "solid-js";
+import { Component, createSignal, onMount } from "solid-js";
+
+import { useVurt } from "../store/useVurt";
 import Vurt from "../vurt";
 
-const Login = (props) => {
+interface LoginProps {}
+
+const Login: Component<LoginProps> = (props) => {
   const [alias, setAlias] = createSignal("");
-  const [loadingMsg, setLoadingMsg] = createSignal("");
+  const { setIdentity } = useVurt();
 
   const handleClick = async (e: Event) => {
+    if (!alias()) return;
     e.preventDefault();
-    setLoadingMsg("creating your identity");
-    try {
-      const newIdentity = await Vurt.createIdentity(alias());
-      console.log("newIdentity", newIdentity);
-      if (newIdentity) {
-        setAlias("");
-        setLoadingMsg("");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("there was an error, please try again");
-      setLoadingMsg("");
-    }
+    const newIdentity = Vurt.createIdentity();
+    const persona = {
+      alias: alias(),
+      publicKey: newIdentity.persona.publicKey,
+    };
+    localStorage.setItem("TALK_FREE_SECRET_KEY", newIdentity.secretKey);
+    localStorage.setItem("TALK_FREE_PERSONA", JSON.stringify(persona));
+    setIdentity({
+      persona,
+      secretKey: newIdentity.secretKey,
+    });
   };
 
   return (
-    <main class="w-screen h-screen flex justify-center items-center font-sans bg-green-pea-800">
+    <main class="w-screen h-screen flex justify-center items-center font-sans bg-blue-vurt-900">
       <form class="pt-10 px-10 rounded flex justify-center items-center flex-col shadow-md border-4 border-red-punch-200 bg-blue-vurt-500">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -46,20 +49,28 @@ const Login = (props) => {
           placeholder="alias"
           required
           value={alias()}
-          onChange={(e) => setAlias(e.target.nodeValue)}
-          disabled={Boolean(loadingMsg())}
+          autofocus
+          onInput={(e) => setAlias(e.currentTarget.value)}
         />
         <button
           class="bg-blue-vurt-300 hover:bg-blue-vurt-100 hover:border-blue-vurt-900 hover:text-blue-vurt-900 border-2 text-blue-vurt-50 p-2 rounded w-80 text-lg"
           id="login"
           type="submit"
           onClick={handleClick}
-          disabled={Boolean(loadingMsg())}
         >
           <span>Login</span>
         </button>
-        <div class="h-20 flex items-center">
-          <p class="">{loadingMsg()}</p>
+        <div class="h-20 break-words max-w-sm w-96 flex flex-col justify-center items-center">
+          <p>Enter a username.</p>
+          <p>
+            <button
+              onclick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              or click here to learn more
+            </button>
+          </p>
         </div>
       </form>
     </main>
