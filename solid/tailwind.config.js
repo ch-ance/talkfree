@@ -1,8 +1,14 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  purge: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "media", // or 'media' or 'class'
+  mode: "jit",
+  purge: {
+    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+    options: {
+      safelist: [/data-theme$/],
+    },
+  },
+  // darkMode: "media", // or 'media' or 'class'
   theme: {
     screens: {
       sm: "480px",
@@ -91,6 +97,7 @@ module.exports = {
         "4xl": "2rem",
       },
     },
+    
   },
   variants: {
     extend: {},
