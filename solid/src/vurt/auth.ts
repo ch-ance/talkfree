@@ -1,43 +1,6 @@
 import * as nacl from "tweetnacl";
 import * as util from "tweetnacl-util";
 
-export interface Identity {
-  persona: {
-    alias: string;
-    publicKey: string;
-  };
-  secretKey: string;
-}
-
-type ChangeFields<T, R> = Omit<T, keyof R> & R;
-
-export type IdentityWithoutAlias = ChangeFields<
-  Identity,
-  {
-    persona: Omit<Identity["persona"], "alias">;
-  }
->;
-
-const auth = {
-  createIdentity: () => {
-    // create a keypair
-    const keypair = nacl.box.keyPair();
-    const publicKey = util.encodeBase64(keypair.publicKey);
-    const secretKey = util.encodeBase64(keypair.secretKey);
-
-    // publish our public key and alias to IPFS
-    const identity: IdentityWithoutAlias = {
-      persona: {
-        publicKey,
-      },
-      secretKey,
-    };
-    return identity;
-  },
-};
-
-export default auth;
-
 /*
  ** You'll need to generate a key pair for your users e.g.
  ** const keypair = nacl.box.keyPair()

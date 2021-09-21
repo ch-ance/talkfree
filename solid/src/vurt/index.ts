@@ -1,8 +1,22 @@
-import auth, { Identity } from "./auth";
+import * as nacl from "tweetnacl";
+import * as util from "tweetnacl-util";
+
+export interface Identity {
+  public: {
+    alias: string;
+    encPublicKey: string;
+    verifyKey: string;
+  };
+  secret: {
+    encSecretKey: string;
+    signerKey: string;
+  };
+}
+
 import * as IPFS from "ipfs";
 class Vurt {
   ipfs: IPFS.IPFS;
-
+  identity: Identity;
   initIPFS() {
     return new Promise((resolve, reject) => {
       IPFS.create({
@@ -14,19 +28,61 @@ class Vurt {
           resolve(ipfs);
         })
         .catch((err) => {
+          console.error("error!");
           reject(err);
         });
     });
   }
 
-  createIdentity() {
-    return auth.createIdentity();
+  setIdentity(identity: Identity) {
+    this.identity = identity;
   }
 
-  //     this.ipfs
-  //       .add(key)
-  //       .then((addResult) => {
-  //         resolve(addResult.path);
+  createIdentity(alias: string) {
+    console.log("got  here");
+    const encryptionKeyPair = nacl.box.keyPair();
+    const encPublicKey = util.encodeBase64(encryptionKeyPair.publicKey);
+    const encSecretKey = util.encodeBase64(encryptionKeyPair.secretKey);
+    const signKeyPair = nacl.sign.keyPair();
+    const verifyKey = util.encodeBase64(signKeyPair.publicKey);
+    const signerKey = util.encodeBase64(signKeyPair.secretKey);
+    // publish our public key and alias to IPFS
+    const identity: Identity = {
+      public: {
+        alias,
+        encPublicKey,
+        verifyKey,
+      },
+      secret: {
+        encSecretKey,
+        signerKey,
+      },
+    };
+    this.identity = identity;
+    console.log("this.identity", this.identity);
+    return identity;
+  }
+
+  /**
+   * Prove ownership of a private key and attach it to any data.
+   *
+   * @param data what you want to sign
+   * @returns an object with the data you want signed along with a signature of the data
+   */
+  sign(data: any) {
+    console.log(this.identity);
+    const msg = util.decodeUTF8(String(data));
+    const key = util.decodeBase64(this.identity.secret.signerKey);
+    const signature = nacl.sign(msg, key);
+    return signature;
+  }
+
+  verify(unsignedData: any, signedData: string, publicSigningKey: string) {
+    const unsigned = util.decodeBase64(unsignedData);
+    const signed = util.decodeBase64(signedData);
+    const pub = util.decodeBase64(publicSigningKey);
+    return nacl.sign.detached.verify(unsigned, signed, pub);
+  }
 }
 
 const vurt = new Vurt();

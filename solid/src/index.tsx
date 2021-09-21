@@ -3,18 +3,14 @@ import { render } from "solid-js/web";
 import "./index.css";
 import App from "./App";
 import { VurtProvider } from "./store/useVurt";
-
-// @ts-ignore
-if (module.hot) {
-  // @ts-ignore
-  module.hot.accept();
-  console.log(module);
-}
+import { ChatProvider } from "./store/useChat";
 
 render(
   () => (
     <VurtProvider>
-      <App />
+      <ChatProvider>
+        <App />
+      </ChatProvider>
     </VurtProvider>
   ),
   document.getElementById("root")

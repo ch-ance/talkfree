@@ -5,10 +5,10 @@ import {
   Accessor,
   Context,
 } from "solid-js";
-import { Identity, IdentityWithoutAlias } from "../vurt/auth";
+import vurt, { Identity } from "../vurt";
 
 interface Store {
-  identity: Accessor<Identity | IdentityWithoutAlias>;
+  identity: Accessor<Identity>;
   setIdentity: any;
 }
 
@@ -16,9 +16,12 @@ const VurtContext: Context<Store> = createContext();
 
 export function VurtProvider(props) {
   const [identity, setIdentity] = createSignal({
-    persona: JSON.parse(localStorage.getItem("TALK_FREE_PERSONA")),
-    secretKey: localStorage.getItem("TALK_FREE_SECRET_KEY"),
+    public: JSON.parse(localStorage.getItem("PUBLIC_KEYS")),
+    secret: JSON.parse(localStorage.getItem("SECRET_KEYS")),
   });
+
+  vurt.setIdentity(identity());
+
   const store: Store = {
     identity,
     setIdentity,

@@ -1,7 +1,7 @@
 import { Component, createSignal, onMount } from "solid-js";
 
 import { useVurt } from "../store/useVurt";
-import Vurt from "../vurt";
+import vurt from "../vurt";
 
 interface LoginProps {}
 
@@ -10,19 +10,15 @@ const Login: Component<LoginProps> = (props) => {
   const { setIdentity } = useVurt();
 
   const handleClick = async (e: Event) => {
-    if (!alias()) return;
     e.preventDefault();
-    const newIdentity = Vurt.createIdentity();
-    const persona = {
-      alias: alias(),
-      publicKey: newIdentity.persona.publicKey,
-    };
-    localStorage.setItem("TALK_FREE_SECRET_KEY", newIdentity.secretKey);
-    localStorage.setItem("TALK_FREE_PERSONA", JSON.stringify(persona));
-    setIdentity({
-      persona,
-      secretKey: newIdentity.secretKey,
-    });
+    if (!alias()) setAlias("anon");
+    const newIdentity = vurt.createIdentity(alias());
+
+    localStorage.setItem("SECRET_KEYS", JSON.stringify(newIdentity.secret));
+
+    localStorage.setItem("PUBLIC_KEYS", JSON.stringify(newIdentity.public));
+
+    setIdentity(newIdentity);
   };
 
   return (

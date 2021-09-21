@@ -1,26 +1,17 @@
-import {
-  Component,
-  createEffect,
-  createMemo,
-  createSignal,
-  lazy,
-  onMount,
-} from "solid-js";
-import { Router, Routes, Route, Link } from "solid-app-router";
+import { Component, lazy, onMount } from "solid-js";
+import { Router, Routes, Route } from "solid-app-router";
 import vurt from "./vurt";
 import { useVurt } from "./store/useVurt";
 const Login = lazy(() => import("./components/Login"));
-const Home = lazy(() => import("./components/Home"));
+const ChatScreen = lazy(() => import("./components/ChatScreen"));
 
 const App: Component = () => {
-  const [loadingIPFS, setLoadingIPFS] = createSignal(true);
   const { identity } = useVurt();
 
   const connectToIPFS = () => {
     vurt
       .initIPFS()
       .then((ipfs) => {
-        setLoadingIPFS(false);
         console.log("connected to ipfs", ipfs);
       })
       .catch((err) => {
@@ -36,7 +27,7 @@ const App: Component = () => {
       <Routes>
         <Route
           path="/"
-          element={identity()?.persona?.publicKey ? <Home /> : <Login />}
+          element={identity()?.public?.alias ? <ChatScreen /> : <Login />}
         />
       </Routes>
     </Router>
