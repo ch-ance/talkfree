@@ -14,11 +14,13 @@ export interface Identity {
 }
 
 import * as IPFS from "ipfs";
+import Peer from "peerjs";
 class Vurt {
   ipfs: IPFS.IPFS;
   identity: Identity;
-  initIPFS() {
-    return new Promise((resolve, reject) => {
+  peer: Peer;
+  init() {
+    const ipfsPromise = new Promise((resolve, reject) => {
       IPFS.create({
         repo: String(Math.random() + Date.now()),
         init: { algorithm: "Ed25519" },
@@ -32,6 +34,18 @@ class Vurt {
           reject(err);
         });
     });
+    const peerPromise = new Promise((resolve, reject) => {
+      const peer = new Peer();
+      peer.on("open", (_id) => {
+        this.peer = peer;
+        resolve(peer);
+      });
+      peer.on("error", (err) => {
+        reject(err);
+      });
+    });
+
+    return Promise.all([ipfsPromise, peerPromise]);
   }
 
   setIdentity(identity: Identity) {
