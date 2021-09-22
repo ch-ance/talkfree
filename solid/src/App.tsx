@@ -10,9 +10,10 @@ const App: Component = () => {
 
   const connectToIPFS = () => {
     vurt
-      .initIPFS()
-      .then((ipfs) => {
+      .init()
+      .then(([ipfs, peer]) => {
         console.log("connected to ipfs", ipfs);
+        console.log("peerjs connected", peer);
       })
       .catch((err) => {
         console.error(err);
